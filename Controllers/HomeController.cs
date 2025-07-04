@@ -20,29 +20,7 @@ namespace street.Controllers
 
         public IActionResult Index()
         {
-            try
-            {
-                var testConection = _dbContext.GetCollection<BsonDocument>("Produto");
-
-                var document = new BsonDocument
-                {
-                    { "Name", "Test Product" },
-                    { "Price", 19.99 },
-                    { "Category", "Test Category" }
-                };
-
-                testConection.InsertOne(document);
-                ViewBag.Message = "Conexão com MongoDB estabelecida e um documento inserido com sucesso!";
-            }
-            catch (MongoConnectionException ex)
-            {
-                ViewBag.Message = "Erro ao conectar ao MongoDB: " + ex.Message;
-            }
-            catch (Exception ex)
-            {
-                ViewBag.Message = "Ocorreu um erro: " + ex.Message;
-            }
-            return View();
+           return View();
         }
 
         public IActionResult Privacy()

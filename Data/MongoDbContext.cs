@@ -5,17 +5,17 @@ namespace street.Data
 {
     public class MongoDbContext
     {
-        private readonly IMongoDatabase mongoSSDB;
+        private readonly IMongoDatabase StreetStoreDb;
 
         public MongoDbContext(IOptions<Config.MongoDbSettings> settings)
         {
             var client = new MongoClient(settings.Value.ConnectionString);
-            mongoSSDB = client.GetDatabase(settings.Value.DatabaseName);
+            StreetStoreDb = client.GetDatabase(settings.Value.DatabaseName);
         }
 
         public IMongoCollection<T> GetCollection<T>(string name)
         {
-            return mongoSSDB.GetCollection<T>(name);
+            return StreetStoreDb.GetCollection<T>(name);
         }
     }
 }
