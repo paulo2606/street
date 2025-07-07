@@ -4,6 +4,9 @@
     ViewData["Title"] = "Detalhes do Produto - " + Model.Nome;
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/detalhe-produto.css" />
+</head>
     <main class="product-detail-container">
         <div class="product-images">
             <div class="main-image-placeholder">
@@ -232,6 +235,9 @@
             </div>
         </div>
     </section>
+@section styles {
+    <link rel="stylesheet" href="~/css/detalheProduto.css">
+}
     
     <script src="~/js/scriptDetalheProduto.js">
     </script>

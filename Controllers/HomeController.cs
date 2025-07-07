@@ -1,26 +1,42 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using street.Data;
 using street.Models;
+using street.Services;
+using System.Threading.Tasks; // Para async/await
 
 namespace street.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly MongoDbContext _dbContext;
+        private readonly ProdutoService _produtoService;
 
-        public HomeController(ILogger<HomeController> logger, MongoDbContext dbContext)
+        public HomeController(ILogger<HomeController> logger, ProdutoService produtoService)
         {
             _logger = logger;
-            _dbContext = dbContext;
+            _produtoService = produtoService;
+        }
+            
+        public async Task<IActionResult> Index()
+        {
+            var produtos = await _produtoService.GetAsync();
+            return View(produtos);
         }
 
-        public IActionResult Index()
+        // ADICIONE ESTA ACTION AQUI:
+        public async Task<IActionResult> DetalheProduto(string id) // Certifique-se de que o tipo do ID (string/int) é o mesmo do seu modelo/serviço
         {
-           return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var produto = await _produtoService.GetAsync(id); // Use o método correto do seu ProdutoService para buscar por ID
+            if (produto == null)
+            {
+                return NotFound();
+            }
+            return View(produto);
         }
 
         public IActionResult Privacy()

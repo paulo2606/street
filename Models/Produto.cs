@@ -22,6 +22,6 @@ namespace street.Models
         public int Estoque { get; set; }
 
         [BsonElement("ImageUrl")] 
-        public string ImageUrl { get; set; } = string.Empty; 
+        public string ImageUrl { get; set; } 
     }
 }

@@ -1,0 +1,58 @@
+[
+  {
+    "Nome": "Camiseta OverSized Verde",
+    "Descricao": "Camiseta de algodão 100% premium com caimento oversized, ideal para um estilo streetwear moderno e confortável. Cor verde musgo vibrante.",
+    "Preco": 119.90,
+    "Estoque": 50,
+    "ImageUrl": "/img/produtos/camiseta_oversized_verde.jpg"
+  },
+  {
+    "Nome": "Calça Cargo Verde Com Bolso",
+    "Descricao": "Calça cargo unissex em sarja resistente, com múltiplos bolsos laterais. Perfeita para um look utilitário e despojado. Cor verde militar.",
+    "Preco": 229.90,
+    "Estoque": 35,
+    "ImageUrl": "/img/produtos/calca_cargo_verde.jpg"
+  },
+  {
+    "Nome": "Moletom Azul com Bolso Canguru",
+    "Descricao": "Moletom flanelado azul marinho, com capuz e bolso canguru. Conforto e estilo para os dias mais frios. Tecido macio e durável.",
+    "Preco": 445.90,
+    "Estoque": 20,
+    "ImageUrl": "/img/produtos/moletom_azul_canguru.jpg"
+  },
+  {
+    "Nome": "Moletom NIKE StreetWare Cinza",
+    "Descricao": "Moletom exclusivo Nike da linha StreetWare, com logo bordado e detalhes em preto. Edição limitada para colecionadores.",
+    "Preco": 670.00,
+    "Estoque": 10,
+    "ImageUrl": "/img/produtos/moletom_nike_streetware.jpg"
+  },
+  {
+    "Nome": "Camiseta Box Logo Branca",
+    "Descricao": "Camiseta básica em algodão egípcio com logo minimalista em box. Conforto e sofisticação em uma peça essencial.",
+    "Preco": 799.90,
+    "Estoque": 15,
+    "ImageUrl": "/img/produtos/camiseta_box_logo_branca.jpg"
+  },
+  {
+    "Nome": "Moletom Fear of God Essentials Creme",
+    "Descricao": "Moletom de alta costura da coleção Fear of God Essentials. Tecido pesado, caimento perfeito e acabamento impecável. Cor creme.",
+    "Preco": 1129.90,
+    "Estoque": 8,
+    "ImageUrl": "/img/produtos/moletom_fog_essentials.jpg"
+  },
+  {
+    "Nome": "Camiseta Off-White Industrial Branca",
+    "Descricao": "Clássica camiseta Off-White com estampa 'Industrial' nas costas e setas na frente. 100% algodão, corte regular.",
+    "Preco": 219.90,
+    "Estoque": 25,
+    "ImageUrl": "/img/produtos/camiseta_off_white.jpg"
+  },
+  {
+    "Nome": "Camiseta básica com logo StreetWear Premium",
+    "Descricao": "Camiseta de algodão penteado, com toque suave e logo discreto bordado no peito. Ideal para o dia a dia.",
+    "Preco": 999.90,
+    "Estoque": 40,
+    "ImageUrl": "/img/produtos/camiseta_logo_str_premium.jpg"
+  }
+]

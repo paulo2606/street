@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"] - StreetStore</title> 
     <link rel="stylesheet" href="~/css/index.css">
+    @* <link href="~/css/detalhe-produto.css" rel="stylesheet" />; *@
 
     @await RenderSectionAsync("Styles", required: false) 
 
@@ -19,7 +20,7 @@
     <header class="main-header" style="margin-top: 70px;">
         <nav class="navbar">
             <ul class="nav-links">
-                <li><a asp-controller="Produtos" asp-action="Index">Vestuário</a></li> 
+                <li><a asp-controller="Produtos" asp-action="Index">Produtos</a></li> 
                 <li><a href="#">Acessórios</a></li>
                 <li><a href="#">Calçados</a></li>
             </ul>

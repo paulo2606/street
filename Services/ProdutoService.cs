@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using street.Data;
 using street.Models;
-using System.Linq.Expressions; // <-- Adicione esta linha para Expression
+using System.Linq.Expressions;
 
 namespace street.Services
 {
@@ -11,9 +11,8 @@ namespace street.Services
 
         public ProdutoService(MongoDbContext dbContext)
         {
-            _produtosCollection = dbContext.GetCollection<Produto>("Produtos");
+            _produtosCollection = dbContext.GetCollection<Produto>("Products");
         }
-
         public async Task<List<Produto>> GetAsync() =>
             await _produtosCollection.Find(_ => true).ToListAsync();
 

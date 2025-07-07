@@ -4,10 +4,6 @@
     ViewData["Title"] = "Catálogo de Produtos - SS Moda";
     Layout = "_Layout";
 }
-
-@section Styles {
-    }
-
 <main role="main">
     <section class="products-section">
         <h1>Confira Nossos Produtos</h1>
@@ -17,7 +13,7 @@
                 foreach (var produto in Model)
                 {
                     <div class="product-item">
-                        <a asp-controller="Produtos" asp-action="DetalheProduto" asp-route-id="@produto.Id" class="product-link">
+                        <a asp-controller="Home" asp-action="DetalheProduto" asp-route-id="@produto.Id" class="product-link">
                             <img src="@produto.ImageUrl" alt="@produto.Nome" class="product-image-placeholder" style="width: 100%; height: 200px; object-fit: cover;">
                         </a>
                         <p class="product-name">@produto.Nome</p>
