@@ -2,7 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using street.Models;
 using street.Services;
-using System.Threading.Tasks; // Para async/await
+using System.Threading.Tasks; 
 
 namespace street.Controllers
 {
@@ -21,27 +21,6 @@ namespace street.Controllers
         {
             var produtos = await _produtoService.GetAsync();
             return View(produtos);
-        }
-
-        // ADICIONE ESTA ACTION AQUI:
-        public async Task<IActionResult> DetalheProduto(string id) // Certifique-se de que o tipo do ID (string/int) é o mesmo do seu modelo/serviço
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var produto = await _produtoService.GetAsync(id); // Use o método correto do seu ProdutoService para buscar por ID
-            if (produto == null)
-            {
-                return NotFound();
-            }
-            return View(produto);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

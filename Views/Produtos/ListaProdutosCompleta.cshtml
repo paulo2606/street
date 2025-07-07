@@ -1,0 +1,99 @@
+﻿@model List<street.Models.Produto>
+
+@{
+   ViewData["Title"] = "Catalogo - SS Moda";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/catalogo.css">
+</head>
+
+<div class="catalog-content">
+    <aside class="filters-sidebar">
+        <h2>Filtros</h2>
+
+        <div class="filter-group">
+            <h3>Categorias</h3>
+            <ul>
+                <li><a href="#">Camisetas</a></li>
+                <li><a href="#">Calças</a></li>
+                <li><a href="#">Moletons</a></li>
+                <li><a href="#">Jaquetas</a></li>
+                <li><a href="#">Acessórios</a></li>
+                <li><a href="#">Calçados</a></li>
+            </ul>
+        </div>
+
+        <div class="filter-group">
+            <h3>Tamanho</h3>
+            <div class="size-options">
+                <label><input type="checkbox" name="size" value="PP"> PP</label>
+                <label><input type="checkbox" name="size" value="P"> P</label>
+                <label><input type="checkbox" name="size" value="M"> M</label>
+                <label><input type="checkbox" name="size" value="G"> G</label>
+                <label><input type="checkbox" name="size" value="GG"> GG</label>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <h3>Cor</h3>
+            <div class="color-options">
+                <span class="color-box black" data-color="black"></span>
+                <span class="color-box white" data-color="white"></span>
+                <span class="color-box red" data-color="red"></span>
+                <span class="color-box blue" data-color="blue"></span>
+                <span class="color-box green" data-color="green"></span>
+                <span class="color-box gray" data-color="gray"></span>
+            </div>
+        </div>
+
+        <div class="filter-group">
+            <h3>Preço</h3>
+            <input type="range" min="0" max="1500" value="750" class="price-range">
+            <p>Valor: R$ <span id="price-value">750</span></p>
+        </div>
+
+        <div class="filter-group">
+            <h3>Marca</h3>
+            <select name="brand">
+                <option value="">Todas</option>
+                <option value="nike">Nike</option>
+                <option value="adidas">Adidas</option>
+                <option value="off-white">Off-White</option>
+                <option value="fear-of-god">Fear of God</option>
+                <option value="ss-moda">SS Moda</option>
+            </select>
+        </div>
+
+        <button class="apply-filters">Aplicar Filtros</button>
+        <button class="clear-filters">Limpar Filtros</button>
+
+    </aside>
+    <section class="products-section">
+        <h1>Confira Nossos Produtos</h1>
+        <div class="products-grid">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var produto in Model)
+                {
+                    <div class="product-item">
+                        <a asp-controller="Produtos" asp-action="DetalheProduto" asp-route-id="@produto.Id" class="product-link">
+                            <img src="@produto.ImageUrl" alt="@produto.Nome" class="product-image-placeholder" style="width: 100%; height: 200px; object-fit: cover;">
+                        </a>
+                        <p class="product-name">@produto.Nome</p>
+                        <p class="product-price">R$ @produto.Preco.ToString("N2")</p>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="col-12 text-center">Nenhum produto disponível no momento. Por favor, adicione produtos ao banco de dados.</p>
+            }
+        </div>
+    </section>
+
+    <script src="~/js/scriptListaProdutosCompleta">
+    </script>
+   </div>
+
+

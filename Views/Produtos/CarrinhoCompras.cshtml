@@ -1,0 +1,74 @@
+﻿@page
+@model street.Views.Produtos.CarrinhoComprasModel
+@{
+    ViewData["Title"] = "Carrinho de Compras";
+}
+
+<main class="container">
+    <section class="cart-section">
+        <div class="cart-items">
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/100x100?text=Produto+1" alt="Camiseta Básica" class="item-image">
+                <div class="item-details">
+                    <h3 class="item-name">Camiseta Básica Algodão</h3>
+                    <p class="item-price">R$ 49,90</p>
+                    <div class="item-quantity-controls">
+                        <button class="quantity-btn">-</button>
+                        <input type="number" value="1" min="1" class="item-quantity">
+                        <button class="quantity-btn">+</button>
+                    </div>
+                </div>
+                <button class="remove-item-btn"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/100x100?text=Produto+2" alt="Calça Jeans Slim" class="item-image">
+                <div class="item-details">
+                    <h3 class="item-name">Calça Jeans Slim Fit</h3>
+                    <p class="item-price">R$ 129,90</p>
+                    <div class="item-quantity-controls">
+                        <button class="quantity-btn">-</button>
+                        <input type="number" value="1" min="1" class="item-quantity">
+                        <button class="quantity-btn">+</button>
+                    </div>
+                </div>
+                <button class="remove-item-btn"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="cart-item">
+                <img src="https://via.placeholder.com/100x100?text=Produto+3" alt="Tênis Esportivo" class="item-image">
+                <div class="item-details">
+                    <h3 class="item-name">Tênis Esportivo Casual</h3>
+                    <p class="item-price">R$ 199,90</p>
+                    <div class="item-quantity-controls">
+                        <button class="quantity-btn">-</button>
+                        <input type="number" value="1" min="1" class="item-quantity">
+                        <button class="quantity-btn">+</button>
+                    </div>
+                </div>
+                <button class="remove-item-btn"><i class="fas fa-times"></i></button>
+            </div>
+
+            <p class="empty-cart-message hidden">Seu carrinho está vazio.</p>
+
+        </div>
+
+        <div class="cart-summary">
+            <h2>Resumo do Pedido</h2>
+            <div class="summary-line">
+                <span>Subtotal:</span>
+                <span class="summary-value">R$ 379,70</span>
+            </div>
+            <div class="summary-line">
+                <span>Frete:</span>
+                <span class="summary-value">R$ 20,00</span>
+            </div>
+            <div class="summary-line total-line">
+                <span>Total:</span>
+                <span class="summary-value total-price">R$ 399,70</span>
+            </div>
+            <button class="checkout-btn">Finalizar Compra</button>
+            <button class="continue-shopping-btn">Continuar Comprando</button>
+        </div>
+    </section>
+</main>
