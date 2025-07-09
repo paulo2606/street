@@ -1,0 +1,221 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    color: #343a40;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1000px;
+    min-width: 800px;
+    width: 90%;
+    margin: 20px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.cart-section {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    justify-content: space-between;
+}
+
+.cart-items {
+    flex: 2;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 300px;
+    margin-right: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    padding: 15px 0;
+}
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+.item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.item-details {
+    flex-grow: 1;
+}
+
+.item-name {
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+    color: #007bff;
+}
+
+.item-price {
+    margin: 0;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.item-quantity-controls {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+    .item-quantity-controls button {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+
+        .item-quantity-controls button:hover {
+            background-color: #5a6268;
+        }
+
+.item-quantity {
+    width: 40px;
+    text-align: center;
+    margin: 0 5px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 5px 0;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.remove-item-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-left: 20px;
+    transition: color 0.3s ease;
+}
+
+    .remove-item-btn:hover {
+        color: #a71d2a;
+    }
+
+.empty-cart-message {
+    text-align: center;
+    font-size: 1.2em;
+    color: #6c757d;
+    padding: 50px 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.cart-summary {
+    flex: 1;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 280px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+    text-align: center;
+}
+
+    .cart-summary h2 {
+        margin-top: 0;
+        color: #007bff;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .summary-line span {
+        font-size: 1em;
+    }
+
+.total-line {
+    font-weight: bold;
+    font-size: 1.2em;
+    border-top: 1px solid #dee2e6;
+    padding-top: 15px;
+    margin-top: 15px;
+    color: #343a40;
+}
+
+.total-price {
+    color: #007bff;
+}
+
+.checkout-btn, .continue-shopping-btn {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.checkout-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+    .checkout-btn:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+.continue-shopping-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+    .continue-shopping-btn:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+    }
+

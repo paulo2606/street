@@ -2,10 +2,12 @@
 
 @{
     ViewData["Title"] = "Detalhes do Produto - " + Model.Nome;
+    ViewData["HideHeroSection"] = true;
 }
 
 <head>
     <link rel="stylesheet" href="~/css/detalhe-produto.css" />
+    <link rel="stylesheet" href="~/css/catalogo.css">
 </head>
     <main class="product-detail-container">
         <div class="product-images">
@@ -56,12 +58,14 @@
 
             @if (Model.Estoque > 0)
             {
-                <form asp-controller="Carrinho" asp-action="Adicionar" method="post">
+                <form asp-controller="CarrinhoDeCompras" asp-action="AdicionarItem" method="post">
                     <input type="hidden" name="produtoId" value="@Model.Id" />
+                    <br />
                     <div class="mb-3">
                         <label for="quantidade" class="form-label">Quantidade:</label>
                         <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="@Model.Estoque" class="form-control" style="width: 100px;" />
                     </div>
+                    <br />
                     <button type="submit" class="add-to-cart-button">Adicionar ao Carrinho</button>
                 </form>
                 <p class="text-success mt-2">Disponível em estoque: @Model.Estoque unidades</p>

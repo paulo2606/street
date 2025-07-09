@@ -41,34 +41,9 @@ namespace street.Controllers
             return View(produto);
         }
 
-        public async Task<IActionResult> SeedProducts()
+        public async Task<IActionResult> CarrinhoDeCompras()
         {
-            var jsonFilePath = Path.Combine(_env.ContentRootPath, "Data", "produtos.json");
-
-            if (!System.IO.File.Exists(jsonFilePath))
-            {
-                return BadRequest("Arquivo JSON de produtos não encontrado em: " + jsonFilePath);
-            }
-
-            var jsonString = await System.IO.File.ReadAllTextAsync(jsonFilePath);
-            var produtosIniciais = JsonSerializer.Deserialize<List<Produto>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-            if (produtosIniciais == null || !produtosIniciais.Any())
-            {
-                return BadRequest("Nenhum produto encontrado no arquivo JSON ou falha na desserialização.");
-            }
-
-            int produtosAdicionados = 0;
-            foreach (var produto in produtosIniciais)
-            {
-                var existing = await _produtoService.GetAsync(p => p.Nome == produto.Nome);
-                if (existing == null)
-                {
-                    await _produtoService.CreateAsync(produto);
-                    produtosAdicionados++;
-                }
-            }
-            return Ok($"{produtosAdicionados} produtos foram adicionados/atualizados com sucesso.");
+            return View();
         }
     }
 }

@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Carrinho de Compras";
+    ViewData["HideHeroSection"] = true;
+}
+
+@model street.Models.CarrinhoDeCompras
+
+@using System.Globalization
+
+<head>
+    <link rel="stylesheet" href="~/css/carrinhoCompras.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <main class="container">
+        <section class="cart-section">
+           
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+            }
+
+            @if (Model == null || !Model.Itens.Any())
+            {
+                <p class="empty-cart-message">Seu carrinho está vazio.</p>
+            }
+            else
+            {
+                @foreach (var item in Model.Itens) 
+                {
+                    <div class="cart-items">
+                        <div class="cart-item">
+                            <img src="@item.ImageUrl" alt="@item.NomeProduto" class="item-image">
+                            <div class="item-details">
+                                <h3 class="item-name">@item.NomeProduto</h3>
+                                <p class="item-price">@item.PrecoUnitario.ToString("C", new CultureInfo("pt-BR"))</p>
+                                <div class="item-quantity-controls">
+                                    <button class="quantity-btn">-</button>
+                                    <input type="number" value="@item.Quantidade" min="1" class="item-quantity">
+                                    <button class="quantity-btn">+</button>
+                                </div>
+                            </div>
+                            
+                            <form asp-controller="CarrinhoDeCompras" asp-action="RemoverItem" method="post" onsubmit="return confirm('Tem certeza que deseja remover este item do carrinho?');">
+                                <input type="hidden" name="itemId" value="@item.Id" /> 
+                                <button type="submit" class="remove-item-btn"><i class="fas fa-times"></i></button>
+                            </form>
+                            
+                        </div>
+                    </div>
+                }
+            }
+            <div class="cart-summary">
+                <h2>Resumo do Pedido</h2>
+                <div class="summary-line">
+                    <span>Subtotal:</span>
+                    <span class="summary-value">
+                        @if (Model != null)
+                        {
+                            @(Model.Itens.Sum(item => item.Total).ToString("C", new CultureInfo("pt-BR")))
+                        }
+                        else
+                        {
+                            @(0.00m.ToString("C", new CultureInfo("pt-BR")))
+                        }
+                    </span>
+                </div>
+                <div class="summary-line">
+                    <span>Frete:</span>
+                    <span class="summary-value">R$ 0,00</span> 
+                </div>
+                <div class="summary-line total-line">
+                    <span>Total:</span>
+                    <span class="summary-value total-price">
+                        @if (Model != null)
+                        {
+                            @(Model.Itens.Sum(item => item.Total).ToString("C", new CultureInfo("pt-BR")))
+                        }
+                        else
+                        {
+                            @(0.00m.ToString("C", new CultureInfo("pt-BR")))
+                        }
+                    </span>
+                </div>
+                <button class="checkout-btn">Finalizar Compra</button>
+                <a asp-controller="Home" asp-action="Index" class="continue-shopping-btn">Continuar Comprando</a>
+            </div>
+        </section>
+    </main>
+</body>

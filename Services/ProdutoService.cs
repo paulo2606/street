@@ -13,6 +13,7 @@ namespace street.Services
         {
             _produtosCollection = dbContext.GetCollection<Produto>("Products");
         }
+
         public async Task<List<Produto>> GetAsync() =>
             await _produtosCollection.Find(_ => true).ToListAsync();
 
