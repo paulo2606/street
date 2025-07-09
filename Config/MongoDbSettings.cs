@@ -5,5 +5,7 @@
         //passamos como .Empty para evitar valores nulos
         public string ConnectionString { get; set; } = string.Empty;
         public string DatabaseName { get; set; } = string.Empty;
+        public string UseCollectionName { get; set; } = string.Empty;   
+        public string RolesCollectionName { get; set; } = string.Empty;
     }
 }
