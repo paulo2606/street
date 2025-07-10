@@ -1,0 +1,49 @@
+﻿@model street.Models.CadastroModel
+
+@* Este partial view NÃO terá @{ Layout = null; } pois ele será renderizado dentro de um layout existente. *@
+
+<div id="cadastroModal" class="modal-overlay">
+    <div class="form-card modal-content">
+        <button class="modal-close-btn">&times;</button>
+        <h2 class="form-title">Criar Conta</h2>
+
+        <p class="or-separator">Use seu email para registro:</p>
+
+        <form asp-controller="Conta" asp-action="Cadastro" method="post" class="main-form">
+            <div asp-validation-summary="All" class="text-danger validation-summary"></div>
+
+            <div class="form-group-custom">
+                <i class="fas fa-user icon"></i>
+                <input asp-for="Nome" class="form-control-custom" placeholder="Nome" />
+                <span asp-validation-for="Nome" class="text-danger validation-message"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <i class="fas fa-envelope icon"></i>
+                <input asp-for="Email" class="form-control-custom" placeholder="Email" />
+                <span asp-validation-for="Email" class="text-danger validation-message"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <i class="fas fa-lock icon"></i>
+                <input asp-for="Password" class="form-control-custom" placeholder="Senha" />
+                <span asp-validation-for="Password" class="text-danger validation-message"></span>
+            </div>
+
+            <div class="form-group-custom">
+                <i class="fas fa-lock icon"></i>
+                <input asp-for="ConfirmPassword" class="form-control-custom" placeholder="Confirmar Senha" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger validation-message"></span>
+            </div>
+
+            <button type="submit" class="btn-submit">CADASTRAR</button>
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

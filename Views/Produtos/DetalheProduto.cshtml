@@ -7,238 +7,252 @@
 
 <head>
     <link rel="stylesheet" href="~/css/detalhe-produto.css" />
-    <link rel="stylesheet" href="~/css/catalogo.css">
+    @* <link rel="stylesheet" href="~/css/catalogo.css"> *@
 </head>
-    <main class="product-detail-container">
-        <div class="product-images">
-            <div class="main-image-placeholder">
-                <img src="@Model.ImageUrl" alt="Imagem principal do produto">
+<main class="product-detail-container">
+    <div class="product-images">
+        <div class="main-image-placeholder">
+            <img src="@Model.ImageUrl" alt="Imagem principal do produto">
+        </div>
+        <div class="thumbnail-images">
+            <div class="thumbnail active">
+                <img src="@Model.ImageUrl" alt="Miniatura 1">
             </div>
-            <div class="thumbnail-images">
-                <div class="thumbnail active">
-                    <img src="@Model.ImageUrl" alt="Miniatura 1">
+            <div class="thumbnail">
+                <img src="@Model.ImageUrl" alt="Miniatura 2">
+            </div>
+            <div class="thumbnail">
+                <img src="@Model.ImageUrl" alt="Miniatura 3">
+            </div>
+        </div>
+    </div>
+
+    <div class="product-info">
+        <h1 class="product-title">@Model.Nome</h1>
+        <p class="product-price-display">R$ @Model.Preco.ToString("N2")</p>
+        <div class="product-description">
+            <p>@Model.Descricao</p>
+        </div>
+
+        <div class="product-options">
+            <div class="product-colors">
+                <h3>Cores:</h3>
+                <div class="color-options">
+                    <span class="color-box color-1 active" data-color="vinho" title="Vinho"></span>
+                    <span class="color-box color-2" data-color="verde-oliva" title="Verde Oliva"></span>
+                    <span class="color-box color-3" data-color="azul-marinho" title="Azul Marinho"></span>
+                    <span class="color-box color-4" data-color="preto" title="Preto"></span>
                 </div>
-                <div class="thumbnail">
-                    <img src="@Model.ImageUrl" alt="Miniatura 2">
-                </div>
-                <div class="thumbnail">
-                    <img src="@Model.ImageUrl" alt="Miniatura 3">
+            </div>
+            <div class="product-sizes">
+                <h3>Tamanhos:</h3>
+                <div class="size-options">
+                    <span class="size-box active">P</span>
+                    <span class="size-box">M</span>
+                    <span class="size-box">G</span>
+                    <span class="size-box">GG</span>
+                    <span class="size-box">XG</span>
                 </div>
             </div>
         </div>
 
-        <div class="product-info">
-            <h1 class="product-title">@Model.Nome</h1>
-            <p class="product-price-display">R$ @Model.Preco.ToString("N2")</p>
-            <div class="product-description">
-                <p>@Model.Descricao</p>
+        @if (Model.Estoque > 0)
+        {
+            <div class="mb-3">
+                <label for="quantidade" class="form-label">Quantidade:</label>
+                <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="@Model.Estoque" class="form-control" style="width: 100px;" />
             </div>
+            <br />
 
-            <div class="product-options">
-                <div class="product-colors">
-                    <h3>Cores:</h3>
-                    <div class="color-options">
-                        <span class="color-box color-1 active" data-color="vinho" title="Vinho"></span>
-                        <span class="color-box color-2" data-color="verde-oliva" title="Verde Oliva"></span>
-                        <span class="color-box color-3" data-color="azul-marinho" title="Azul Marinho"></span>
-                        <span class="color-box color-4" data-color="preto" title="Preto"></span>
-                    </div>
-                </div>
-                <div class="product-sizes">
-                    <h3>Tamanhos:</h3>
-                    <div class="size-options">
-                        <span class="size-box active">P</span>
-                        <span class="size-box">M</span>
-                        <span class="size-box">G</span>
-                        <span class="size-box">GG</span>
-                        <span class="size-box">XG</span>
-                    </div>
-                </div>
-            </div>
-
-            @if (Model.Estoque > 0)
+            @if (User.Identity.IsAuthenticated)
             {
-                <form asp-controller="CarrinhoDeCompras" asp-action="AdicionarItem" method="post">
-                    <input type="hidden" name="produtoId" value="@Model.Id" />
-                    <br />
-                    <div class="mb-3">
-                        <label for="quantidade" class="form-label">Quantidade:</label>
-                        <input type="number" id="quantidade" name="quantidade" value="1" min="1" max="@Model.Estoque" class="form-control" style="width: 100px;" />
-                    </div>
-                    <br />
-                    <button type="submit" class="add-to-cart-button">Adicionar ao Carrinho</button>
-                </form>
-                <p class="text-success mt-2">Disponível em estoque: @Model.Estoque unidades</p>
+                <div class="add-to-cart-section">
+                    <form asp-controller="CarrinhoDeCompras" asp-action="AdicionarItem" method="post">
+                        <input type="hidden" name="produtoId" value="@Model.Id" />
+                        <input type="hidden" name="quantidade" value="1" /> @* Placeholder, veja a nota acima *@
+                        <button type="submit" class="btn btn-success add-to-cart-btn">Adicionar ao Carrinho</button>
+                    </form>
+                </div>
             }
             else
             {
-                <button type="button" class="add-to-cart-button disabled" disabled>Produto Fora de Estoque</button>
-                <p class="text-danger mt-2">Este produto está fora de estoque.</p>
+                <div class="add-to-cart-section">
+                    <a href="#" id="openLoginModalBtn" class="btn btn-secondary" style="background-color: #6c5ce7; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; display: inline-block;">
+                        Faça login para adicionar ao carrinho
+                    </a>
+                </div>
             }
+            <p class="text-success mt-2">Disponível em estoque: @Model.Estoque unidades</p>
+        }
+        else
+        {
+            <button type="button" class="add-to-cart-button disabled" disabled>Produto Fora de Estoque</button>
+            <p class="text-danger mt-2">Este produto está fora de estoque.</p>
+        }
 
 
-            <div class="product-details-sections">
-                <div class="detail-item">
-                    <div class="detail-header">
-                        <h3>Detalhes</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="detail-content">
-                        <p><strong>Material:</strong> 100% Poliéster de alta resistência, forro interno em fleece.</p>
-                        <p><strong>Corte:</strong> Regular fit, ideal para sobreposições.</p>
-                        <p><strong>Fechamento:</strong> Zíper frontal YKK e botões de pressão.</p>
-                        <p><strong>Bolsos:</strong> Dois bolsos frontais com zíper, um bolso interno no peito.</p>
-                    </div>
+        <div class="product-details-sections">
+            <div class="detail-item">
+                <div class="detail-header">
+                    <h3>Detalhes</h3>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-
-                <div class="detail-item">
-                    <div class="detail-header">
-                        <h3>Medidas</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="detail-content">
-                        <p>Para escolher o tamanho ideal, consulte nossa tabela:</p>
-                        <ul>
-                            <li><strong>P:</strong> Torax 92-96cm, Cintura 76-80cm</li>
-                            <li><strong>M:</strong> Torax 97-101cm, Cintura 81-85cm</li>
-                            <li><strong>G:</strong> Torax 102-106cm, Cintura 86-90cm</li>
-                            <li><strong>GG:</strong> Torax 107-111cm, Cintura 91-95cm</li>
-                            <li><strong>XG:</strong> Torax 112-116cm, Cintura 96-100cm</li>
-                        </ul>
-                        <p><em>As medidas podem variar em até 2cm.</em></p>
-                    </div>
-                </div>
-
-                <div class="detail-item">
-                    <div class="detail-header">
-                        <h3>Mais Informações</h3>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                    <div class="detail-content">
-                        <p>
-                            <strong>Instruções de Lavagem:</strong> Lavar à máquina em água fria, não alvejar, secar em
-                            temperatura baixa. Não passar a ferro sobre estampas.
-                        </p>
-                        <p><strong>Garantia:</strong> 90 dias contra defeitos de fabricação.</p>
-                        <p>
-                            <strong>Origem:</strong> Produto fabricado no Brasil com materiais importados de alta
-                            qualidade.
-                        </p>
-                    </div>
+                <div class="detail-content">
+                    <p><strong>Material:</strong> 100% Poliéster de alta resistência, forro interno em fleece.</p>
+                    <p><strong>Corte:</strong> Regular fit, ideal para sobreposições.</p>
+                    <p><strong>Fechamento:</strong> Zíper frontal YKK e botões de pressão.</p>
+                    <p><strong>Bolsos:</strong> Dois bolsos frontais com zíper, um bolso interno no peito.</p>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <section class="customer-reviews-section">
-        <div class="reviews-container">
-            <h2>Avaliações</h2>
-
-            <div class="overall-rating">
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
+            <div class="detail-item">
+                <div class="detail-header">
+                    <h3>Medidas</h3>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                <p>4.5 de 5 estrelas</p>
+                <div class="detail-content">
+                    <p>Para escolher o tamanho ideal, consulte nossa tabela:</p>
+                    <ul>
+                        <li><strong>P:</strong> Torax 92-96cm, Cintura 76-80cm</li>
+                        <li><strong>M:</strong> Torax 97-101cm, Cintura 81-85cm</li>
+                        <li><strong>G:</strong> Torax 102-106cm, Cintura 86-90cm</li>
+                        <li><strong>GG:</strong> Torax 107-111cm, Cintura 91-95cm</li>
+                        <li><strong>XG:</strong> Torax 112-116cm, Cintura 96-100cm</li>
+                    </ul>
+                    <p><em>As medidas podem variar em até 2cm.</em></p>
+                </div>
             </div>
 
-            <div class="reviews-list">
-                <div class="review-item">
-                    <div class="review-header">
-                        <span class="reviewer-name">Ana Paula S.</span>
-                        <div class="review-stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <p class="review-date">15 de Junho, 2025</p>
-                    <h4 class="review-title">"Qualidade Incrível!"</h4>
-                    <p class="review-text">
-                        A jaqueta superou minhas expectativas! O tecido é ótimo e realmente protege
-                        do vento e da chuva. Veste muito bem e o design é moderno. Recomendo!
-                    </p>
+            <div class="detail-item">
+                <div class="detail-header">
+                    <h3>Mais Informações</h3>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-
-                <div class="review-item">
-                    <div class="review-header">
-                        <span class="reviewer-name">Carlos M.</span>
-                        <div class="review-stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                        </div>
-                    </div>
-                    <p class="review-date">10 de Junho, 2025</p>
-                    <h4 class="review-title">"Bom custo-benefício"</h4>
-                    <p class="review-text">
-                        Pelo preço, a jaqueta é muito boa. É confortável e esquenta bem. A única
-                        ressalva é que a cor preta é um pouco mais para um cinza escuro, mas nada que atrapalhe.
+                <div class="detail-content">
+                    <p>
+                        <strong>Instruções de Lavagem:</strong> Lavar à máquina em água fria, não alvejar, secar em
+                        temperatura baixa. Não passar a ferro sobre estampas.
                     </p>
-                </div>
-
-                <div class="review-item">
-                    <div class="review-header">
-                        <span class="reviewer-name">Fernanda L.</span>
-                        <div class="review-stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                    </div>
-                    <p class="review-date">02 de Junho, 2025</p>
-                    <h4 class="review-title">"Perfeita para o dia a dia"</h4>
-                    <p class="review-text">
-                        Adorei a jaqueta! Leve, mas quentinha. Ideal para ir ao trabalho ou sair à
-                        noite. O capuz removível é um diferencial. Chegou super rápido.
+                    <p><strong>Garantia:</strong> 90 dias contra defeitos de fabricação.</p>
+                    <p>
+                        <strong>Origem:</strong> Produto fabricado no Brasil com materiais importados de alta
+                        qualidade.
                     </p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</main>
 
-    <section class="products-section">
-        <h1>Confira Mais Produtos</h1>
-        <div class="products-grid">
-            <div class="product-item">
-                <a href="#" class="product-link">
-                    <img src="https://via.placeholder.com/200x200?text=Produto+Rel+1" alt="Produto Relacionado 1" class="product-image-placeholder">
-                </a>
-                <p class="product-name">Camiseta OverSized Verde</p>
-                <p class="product-price">R$ 119,90</p>
+<section class="customer-reviews-section">
+    <div class="reviews-container">
+        <h2>Avaliações</h2>
+
+        <div class="overall-rating">
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
             </div>
-            <div class="product-item">
-                <a href="#" class="product-link">
-                    <img src="https://via.placeholder.com/200x200?text=Produto+Rel+2" alt="Produto Relacionado 2" class="product-image-placeholder">
-                </a>
-                <p class="product-name">Calça Cargo Verde Com Bolso</p>
-                <p class="product-price">R$ 229,90</p>
+            <p>4.5 de 5 estrelas</p>
+        </div>
+
+        <div class="reviews-list">
+            <div class="review-item">
+                <div class="review-header">
+                    <span class="reviewer-name">Ana Paula S.</span>
+                    <div class="review-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <p class="review-date">15 de Junho, 2025</p>
+                <h4 class="review-title">"Qualidade Incrível!"</h4>
+                <p class="review-text">
+                    A jaqueta superou minhas expectativas! O tecido é ótimo e realmente protege
+                    do vento e da chuva. Veste muito bem e o design é moderno. Recomendo!
+                </p>
             </div>
-            <div class="product-item">
-                <a href="#" class="product-link">
-                    <img src="https://via.placeholder.com/200x200?text=Produto+Rel+3" alt="Produto Relacionado 3" class="product-image-placeholder">
-                </a>
-                <p class="product-name">Moletom Azul com Bolso</p>
-                <p class="product-price">R$ 445,90</p>
+
+            <div class="review-item">
+                <div class="review-header">
+                    <span class="reviewer-name">Carlos M.</span>
+                    <div class="review-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                    </div>
+                </div>
+                <p class="review-date">10 de Junho, 2025</p>
+                <h4 class="review-title">"Bom custo-benefício"</h4>
+                <p class="review-text">
+                    Pelo preço, a jaqueta é muito boa. É confortável e esquenta bem. A única
+                    ressalva é que a cor preta é um pouco mais para um cinza escuro, mas nada que atrapalhe.
+                </p>
             </div>
-            <div class="product-item">
-                <a href="#" class="product-link">
-                    <img src="https://via.placeholder.com/200x200?text=Produto+Rel+4" alt="Produto Relacionado 4" class="product-image-placeholder">
-                </a>
-                <p class="product-name">Moletom Azul com Bolso</p>
-                <p class="product-price">R$ 445,90</p>
+
+            <div class="review-item">
+                <div class="review-header">
+                    <span class="reviewer-name">Fernanda L.</span>
+                    <div class="review-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                    </div>
+                </div>
+                <p class="review-date">02 de Junho, 2025</p>
+                <h4 class="review-title">"Perfeita para o dia a dia"</h4>
+                <p class="review-text">
+                    Adorei a jaqueta! Leve, mas quentinha. Ideal para ir ao trabalho ou sair à
+                    noite. O capuz removível é um diferencial. Chegou super rápido.
+                </p>
             </div>
         </div>
-    </section>
-    
-    <script src="~/js/scriptDetalheProduto.js">
-    </script>
+    </div>
+</section>
+
+<section class="products-section">
+    <h1>Confira Mais Produtos</h1>
+    <div class="products-grid">
+        <div class="product-item">
+            <a href="#" class="product-link">
+                <img src="https://via.placeholder.com/200x200?text=Produto+Rel+1" alt="Produto Relacionado 1" class="product-image-placeholder">
+            </a>
+            <p class="product-name">Camiseta OverSized Verde</p>
+            <p class="product-price">R$ 119,90</p>
+        </div>
+        <div class="product-item">
+            <a href="#" class="product-link">
+                <img src="https://via.placeholder.com/200x200?text=Produto+Rel+2" alt="Produto Relacionado 2" class="product-image-placeholder">
+            </a>
+            <p class="product-name">Calça Cargo Verde Com Bolso</p>
+            <p class="product-price">R$ 229,90</p>
+        </div>
+        <div class="product-item">
+            <a href="#" class="product-link">
+                <img src="https://via.placeholder.com/200x200?text=Produto+Rel+3" alt="Produto Relacionado 3" class="product-image-placeholder">
+            </a>
+            <p class="product-name">Moletom Azul com Bolso</p>
+            <p class="product-price">R$ 445,90</p>
+        </div>
+        <div class="product-item">
+            <a href="#" class="product-link">
+                <img src="https://via.placeholder.com/200x200?text=Produto+Rel+4" alt="Produto Relacionado 4" class="product-image-placeholder">
+            </a>
+            <p class="product-name">Moletom Azul com Bolso</p>
+            <p class="product-price">R$ 445,90</p>
+        </div>
+    </div>
+</section>
+
+<script src="~/js/scriptDetalheProduto.js">
+</script>

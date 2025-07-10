@@ -32,14 +32,6 @@ body {
     margin-top: 150px;
 }
 
-.main-header {
-    margin-top: 50px;
-}
-
-.navbar {
-    border-radius: 0;
-    box-shadow: none;
-}
 
 /* Seção de Imagens do Produto */
 .product-images {

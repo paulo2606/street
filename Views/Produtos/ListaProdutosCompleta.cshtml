@@ -7,75 +7,81 @@
 
 <head>
     <link rel="stylesheet" href="~/css/catalogo.css">
+    <style>
+        .btn-custom {
+            display: inline-block;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            white-space: nowrap;
+        }
+
+            .btn-custom:hover {
+                opacity: 0.9;
+            }
+
+        .btn-edit {
+            background-color: #28a745;
+            color: white;
+            border: 1px solid #28a745;
+            margin-right: 5px;
+        }
+
+            .btn-edit:hover {
+                background-color: #218838;
+                border-color: #1e7e34;
+            }
+
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+            border: 1px solid #dc3545;
+        }
+
+            .btn-delete:hover {
+                background-color: #c82333;
+                border-color: #bd2130;
+            }
+
+        .product-actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004085;
+            }
+    </style>
 </head>
 
 <div class="catalog-content">
     <aside class="filters-sidebar">
-        <h2>Filtros</h2>
-
-        <div class="filter-group">
-            <h3>Categorias</h3>
-            <ul>
-                <li><a href="#">Camisetas</a></li>
-                <li><a href="#">Calças</a></li>
-                <li><a href="#">Moletons</a></li>
-                <li><a href="#">Jaquetas</a></li>
-                <li><a href="#">Acessórios</a></li>
-                <li><a href="#">Calçados</a></li>
-            </ul>
-        </div>
-
-        <div class="filter-group">
-            <h3>Tamanho</h3>
-            <div class="size-options">
-                <label><input type="checkbox" name="size" value="PP"> PP</label>
-                <label><input type="checkbox" name="size" value="P"> P</label>
-                <label><input type="checkbox" name="checkbox" value="M"> M</label>
-                <label><input type="checkbox" name="size" value="G"> G</label>
-                <label><input type="checkbox" name="size" value="GG"> GG</label>
-            </div>
-        </div>
-
-        <div class="filter-group">
-            <h3>Cor</h3>
-            <div class="color-options">
-                <span class="color-box black" data-color="black"></span>
-                <span class="color-box white" data-color="white"></span>
-                <span class="color-box red" data-color="red"></span>
-                <span class="color-box blue" data-color="blue"></span>
-                <span class="color-box green" data-color="green"></span>
-                <span class="color-box gray" data-color="gray"></span>
-            </div>
-        </div>
-
-        <div class="filter-group">
-            <h3>Preço</h3>
-            <input type="range" min="0" max="1500" value="750" class="price-range">
-            <p>Valor: R$ <span id="price-value">750</span></p>
-        </div>
-
-        <div class="filter-group">
-            <h3>Marca</h3>
-            <select name="brand">
-                <option value="">Todas</option>
-                <option value="nike">Nike</option>
-                <option value="adidas">Adidas</option>
-                <option value="off-white">Off-White</option>
-                <option value="fear-of-god">Fear of God</option>
-                <option value="ss-moda">SS Moda</option>
-            </select>
-        </div>
-
+        <br />
+        <br />
         <button class="apply-filters">Aplicar Filtros</button>
         <button class="clear-filters">Limpar Filtros</button>
-
     </aside>
     <section class="products-section">
-        <h1>Confira Nossos Produtos</h1>
-
-        <p>
-            <a asp-controller="Produtos" asp-action="CriarProduto" class="btn btn-primary">Adicionar Novo Produto</a>
-        </p>
 
         <div class="products-grid">
             @if (Model != null && Model.Any())
@@ -89,10 +95,13 @@
                         <p class="product-name">@produto.Nome</p>
                         <p class="product-price">R$ @produto.Preco.ToString("N2")</p>
 
-                        <div class="product-actions">
-                            <a asp-controller="Produtos" asp-action="EditarProduto" asp-route-id="@produto.Id" class="btn btn-sm btn-info">Editar</a>
-                            <button type="button" class="btn btn-sm btn-danger delete-product-btn" data-id="@produto.Id" data-name="@produto.Nome">Deletar</button>
-                        </div>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="product-actions">
+                                <a asp-controller="Produtos" asp-action="EditarProduto" asp-route-id="@produto.Id" class="btn-custom btn-edit">Editar</a>
+                                <button type="button" class="btn-custom btn-delete delete-product-btn" data-id="@produto.Id" data-name="@produto.Nome">Deletar</button>
+                            </div>
+                        }
                     </div>
                 }
             }
@@ -100,44 +109,49 @@
             {
                 <p class="col-12 text-center">Nenhum produto disponível no momento. Por favor, adicione produtos ao banco de dados.</p>
             }
+
         </div>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <p>
+                <a asp-controller="Produtos" asp-action="CriarProduto" class="btn btn-primary">Adicionar Novo Produto</a>
+            </p>
+        }
     </section>
 
-    @* Seu script original pode ir aqui, ou você pode ter um arquivo JS separado *@
     <script src="~/js/scriptListaProdutosCompleta.js"></script>
 
     @section Scripts {
         <script>
-            // Novo script para a confirmação de exclusão
             document.addEventListener('DOMContentLoaded', function () {
-                var deleteButtons = document.querySelectorAll('.delete-product-btn');
+                if ('@User.IsInRole("Admin")' === 'True') {
+                    var deleteButtons = document.querySelectorAll('.delete-product-btn');
 
-                deleteButtons.forEach(function (button) {
-                    button.addEventListener('click', function () {
-                        var productId = this.getAttribute('data-id');
-                        var productName = this.getAttribute('data-name');
+                    deleteButtons.forEach(function (button) {
+                        button.addEventListener('click', function () {
+                            var productId = this.getAttribute('data-id');
+                            var productName = this.getAttribute('data-name');
 
-                        // Usa o pop-up de confirmação nativo do navegador
-                        var confirmDelete = confirm(`Tem certeza que deseja excluir o produto "${productName}"?`);
+                            var confirmDelete = confirm(`Tem certeza que deseja excluir o produto "${productName}"?`);
 
-                        if (confirmDelete) {
-                            // Se o usuário confirmar, cria um formulário dinâmico e o envia
-                            var form = document.createElement('form');
-                            form.method = 'post';
-                            form.action = `/Produtos/DeletarProdutoConfirmado/${productId}`; // Aponta para a ação POST
+                            if (confirmDelete) {
+                                var form = document.createElement('form');
+                                form.method = 'post';
+                                form.action = `/Produtos/DeletarProduto/${productId}`;
 
-                            var antiForgeryInput = document.createElement('input');
-                            antiForgeryInput.type = 'hidden';
-                            antiForgeryInput.name = '__RequestVerificationToken';
-                            // Preenche o token anti-falsificação (necessário para [ValidateAntiForgeryToken])
-                            antiForgeryInput.value = '@Html.AntiForgeryToken()'.match(/value="([^"]*)"/)[1];
+                                var antiForgeryInput = document.createElement('input');
+                                antiForgeryInput.type = 'hidden';
+                                antiForgeryInput.name = '__RequestVerificationToken';
+                                antiForgeryInput.value = document.querySelector('input[name="__RequestVerificationToken"]').value;
 
-                            form.appendChild(antiForgeryInput);
-                            document.body.appendChild(form);
-                            form.submit();
-                        }
+                                document.body.appendChild(form);
+                                form.appendChild(antiForgeryInput);
+                                form.submit();
+                            }
+                        });
                     });
-                });
+                }
             });
         </script>
     }

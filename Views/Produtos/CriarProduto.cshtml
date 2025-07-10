@@ -2,48 +2,66 @@
 
 @{
     ViewData["Title"] = "Criar Produto";
+    ViewData["HideHeroSection"] = true;
+    ViewData["HideFooter"] = true;
 }
 
-<h1>Criar Novo Produto</h1>
+<head>
+    <link rel="stylesheet" href="~/css/produtoForm.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CriarProduto" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
+<div class="product-edit-container">
+    <h1 class="page-title">Criar Novo Produto</h1>
+    <hr class="section-divider" />
+
+    <div class="form-wrapper">
+        <form asp-action="CriarProduto" enctype="multipart/form-data" class="product-form">
+            <div asp-validation-summary="ModelOnly" class="validation-summary-errors"></div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Nome" class="form-label">Nome do Produto</label>
+                    <input asp-for="Nome" class="form-input" placeholder="Ex: Camiseta Estampada" />
+                    <span asp-validation-for="Nome" class="text-danger validation-message"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Descricao" class="form-label">Descrição</label>
+                    <textarea asp-for="Descricao" class="form-input textarea-resize" rows="5" placeholder="Detalhes do produto..."></textarea>
+                    <span asp-validation-for="Descricao" class="text-danger validation-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Preco" class="form-label">Preço (R$)</label>
+                    <input asp-for="Preco" class="form-input" type="number" step="0.01" placeholder="Ex: 129.99" />
+                    <span asp-validation-for="Preco" class="text-danger validation-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Estoque" class="form-label">Estoque</label>
+                    <input asp-for="Estoque" class="form-input" type="number" placeholder="Ex: 100" />
+                    <span asp-validation-for="Estoque" class="text-danger validation-message"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Descricao" class="control-label"></label>
-                <textarea asp-for="Descricao" class="form-control"></textarea>
-                <span asp-validation-for="Descricao" class="text-danger"></span>
+
+            <div class="form-group image-upload-group">
+                <label for="imagemProduto" class="form-label">Foto do Produto</label>
+                <input type="file" id="imagemProduto" name="imagemProduto" accept="image/*" class="form-input-file" required />
+                <p class="file-info">Selecione uma imagem para o produto.</p>
+                <span asp-validation-for="ImageUrl" class="text-danger validation-message"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Preco" class="control-label"></label>
-                <input asp-for="Preco" class="form-control" type="number" step="0.01" />
-                <span asp-validation-for="Preco" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Estoque" class="control-label"></label>
-                <input asp-for="Estoque" class="form-control" type="number" />
-                <span asp-validation-for="Estoque" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="imagemProduto" class="control-label">Foto do Produto:</label>
-                <input type="file" id="imagemProduto" name="imagemProduto" accept="image/*" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Criar" class="btn btn-primary" />
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-plus-circle icon-left"></i> Criar Produto
+                </button>
+                <a asp-action="ListaProdutosCompleta" class="btn-back-list">
+                    <i class="fas fa-arrow-left icon-left"></i> Voltar para a Lista
+                </a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="ListaProdutosCompleta">Voltar para a Lista</a>
 </div>
 
 @section Scripts {

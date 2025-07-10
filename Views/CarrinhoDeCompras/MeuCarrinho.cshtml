@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Carrinho de Compras";
     ViewData["HideHeroSection"] = true;
+    ViewData["HideFooter"] = true;
 }
 
 @model street.Models.CarrinhoDeCompras
@@ -13,83 +14,133 @@
 </head>
 
 <body>
-    <main class="container">
-        <section class="cart-section">
-           
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-            }
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-            }
+    <main class="cart-page-container">
+        <div class="cart-header">
+            <h1>Seu Carrinho de Compras</h1>
+            <hr />
+        </div>
 
-            @if (Model == null || !Model.Itens.Any())
-            {
-                <p class="empty-cart-message">Seu carrinho está vazio.</p>
-            }
-            else
-            {
-                @foreach (var item in Model.Itens) 
-                {
-                    <div class="cart-items">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success message-alert">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger message-alert">@TempData["ErrorMessage"]</div>
+        }
+
+        @if (Model == null || !Model.Itens.Any())
+        {
+            <p class="empty-cart-message">Seu carrinho está vazio.</p>
+            <div class="empty-cart-actions">
+                <a asp-controller="Home" asp-action="Index" class="btn-go-shopping">
+                    <i class="fas fa-shopping-bag icon-left"></i> Ir às Compras
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="cart-content-wrapper">
+                <section class="cart-items-section">
+                    @foreach (var item in Model.Itens)
+                    {
                         <div class="cart-item">
                             <img src="@item.ImageUrl" alt="@item.NomeProduto" class="item-image">
                             <div class="item-details">
                                 <h3 class="item-name">@item.NomeProduto</h3>
                                 <p class="item-price">@item.PrecoUnitario.ToString("C", new CultureInfo("pt-BR"))</p>
                                 <div class="item-quantity-controls">
-                                    <button class="quantity-btn">-</button>
-                                    <input type="number" value="@item.Quantidade" min="1" class="item-quantity">
-                                    <button class="quantity-btn">+</button>
+                                    <button class="quantity-btn decrease-quantity" data-item-id="@item.Id" data-current-quantity="@item.Quantidade">-</button>
+                                    <input type="number" value="@item.Quantidade" min="1" class="item-quantity-input" data-item-id="@item.Id" readonly> @* Adicionado readonly e data-item-id *@
+                                    <button class="quantity-btn increase-quantity" data-item-id="@item.Id" data-current-quantity="@item.Quantidade">+</button>
                                 </div>
                             </div>
-                            
                             <form asp-controller="CarrinhoDeCompras" asp-action="RemoverItem" method="post" onsubmit="return confirm('Tem certeza que deseja remover este item do carrinho?');">
-                                <input type="hidden" name="itemId" value="@item.Id" /> 
+                                <input type="hidden" name="itemId" value="@item.Id" />
                                 <button type="submit" class="remove-item-btn"><i class="fas fa-times"></i></button>
                             </form>
-                            
                         </div>
+                    }
+                </section>
+
+                <aside class="cart-summary-section">
+                    <h2>Resumo do Pedido</h2>
+                    <div class="summary-line">
+                        <span>Subtotal:</span>
+                        <span class="summary-value subtotal-value">
+                            @(Model.Itens.Sum(item => item.Total).ToString("C", new CultureInfo("pt-BR")))
+                        </span>
                     </div>
-                }
-            }
-            <div class="cart-summary">
-                <h2>Resumo do Pedido</h2>
-                <div class="summary-line">
-                    <span>Subtotal:</span>
-                    <span class="summary-value">
-                        @if (Model != null)
-                        {
+                    <div class="summary-line">
+                        <span>Frete:</span>
+                        <span class="summary-value freight-value">R$ 0,00</span>
+                    </div>
+                    <div class="summary-line total-line">
+                        <span>Total:</span>
+                        <span class="summary-value total-price-value">
                             @(Model.Itens.Sum(item => item.Total).ToString("C", new CultureInfo("pt-BR")))
-                        }
-                        else
-                        {
-                            @(0.00m.ToString("C", new CultureInfo("pt-BR")))
-                        }
-                    </span>
-                </div>
-                <div class="summary-line">
-                    <span>Frete:</span>
-                    <span class="summary-value">R$ 0,00</span> 
-                </div>
-                <div class="summary-line total-line">
-                    <span>Total:</span>
-                    <span class="summary-value total-price">
-                        @if (Model != null)
-                        {
-                            @(Model.Itens.Sum(item => item.Total).ToString("C", new CultureInfo("pt-BR")))
-                        }
-                        else
-                        {
-                            @(0.00m.ToString("C", new CultureInfo("pt-BR")))
-                        }
-                    </span>
-                </div>
-                <button class="checkout-btn">Finalizar Compra</button>
-                <a asp-controller="Home" asp-action="Index" class="continue-shopping-btn">Continuar Comprando</a>
+                        </span>
+                    </div>
+                    <button class="checkout-btn">Finalizar Compra</button>
+                    <a asp-controller="Home" asp-action="Index" class="continue-shopping-btn">Continuar Comprando</a>
+                </aside>
             </div>
-        </section>
+        }
     </main>
 </body>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.quantity-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const itemId = this.dataset.itemId;
+                    const input = document.querySelector(`.item-quantity-input[data-item-id="${itemId}"]`);
+                    let currentQuantity = parseInt(input.value);
+
+                    if (this.classList.contains('increase-quantity')) {
+                        currentQuantity++;
+                    } else if (this.classList.contains('decrease-quantity')) {
+                        currentQuantity--;
+                    }
+
+                    if (currentQuantity < 1) {
+                        if (!confirm('Tem certeza que deseja remover este item?')) {
+                            return;
+                        }
+                        const form = document.createElement('form');
+                        form.method = 'post';
+                        form.action = `/CarrinhoDeCompras/RemoverItem`;
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'itemId';
+                        hiddenInput.value = itemId;
+                        form.appendChild(hiddenInput);
+                        document.body.appendChild(form);
+                        form.submit();
+                        return;
+                    }
+
+                    const updateForm = document.createElement('form');
+                    updateForm.method = 'post';
+                    updateForm.action = `/CarrinhoDeCompras/AtualizarQuantidade`;
+
+                    const itemIdInput = document.createElement('input');
+                    itemIdInput.type = 'hidden';
+                    itemIdInput.name = 'itemId';
+                    itemIdInput.value = itemId;
+                    updateForm.appendChild(itemIdInput);
+
+                    const quantityInput = document.createElement('input');
+                    quantityInput.type = 'hidden';
+                    quantityInput.name = 'novaQuantidade';
+                    quantityInput.value = currentQuantity;
+                    updateForm.appendChild(quantityInput);
+
+                    document.body.appendChild(updateForm);
+                    updateForm.submit();
+                });
+            });
+        });
+    </script>
+}

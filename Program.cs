@@ -3,17 +3,17 @@ using street.Data;
 using street.Services;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Driver;
-using AspNetCore.Identity.Mongo;
-using street.Models;
-using AspNetCore.Identity.Mongo.Model;
+using AspNetCore.Identity.Mongo; 
+using street.Models; 
+using AspNetCore.Identity.Mongo.Model; 
 
 internal class Program
 {
-    private static void Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Configuração para o MongoDB e Identity
+        // config mongo e identity
         builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
         builder.Services.AddSingleton<MongoDbContext>();
 
@@ -35,7 +35,7 @@ internal class Program
         .AddDefaultTokenProviders();
 
 
-        // Cookies
+        // cookies para autenticação
         builder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
@@ -51,7 +51,7 @@ internal class Program
         builder.Services.AddScoped<ProdutoService>();
         builder.Services.AddScoped<CarrinhoService>();
 
-        // Configuração de sessão
+        // config p sessão
         builder.Services.AddSession(options =>
         {
             options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -81,6 +81,49 @@ internal class Program
         app.MapStaticAssets();
 
         app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}").WithStaticAssets();
+
+        //config para adicionar o usuário admin e a role Admin
+        using (var scope = app.Services.CreateScope())
+        {
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<MongoRole<string>>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            const string adminRoleName = "Admin";
+            if (!await roleManager.RoleExistsAsync(adminRoleName))
+            {
+                await roleManager.CreateAsync(new MongoRole<string>(adminRoleName)); 
+                Console.WriteLine($"Role '{adminRoleName}' criada com sucesso.");
+            }
+
+            const string adminEmail = "admin@smoda.com";
+            const string adminPassword = "admin@smoda.com";
+
+            var adminUser = await userManager.FindByEmailAsync(adminEmail);
+            if (adminUser == null)
+            {
+                adminUser = new ApplicationUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+                var result = await userManager.CreateAsync(adminUser, adminPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(adminUser, adminRoleName);
+                    Console.WriteLine($"Usuário admin '{adminEmail}' criado com sucesso e adicionado à role '{adminRoleName}'.");
+                }
+                else
+                {
+                    Console.WriteLine($"Erro ao criar usuário admin: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Usuário admin '{adminEmail}' já existe.");
+                if (!await userManager.IsInRoleAsync(adminUser, adminRoleName))
+                {
+                    await userManager.AddToRoleAsync(adminUser, adminRoleName);
+                    Console.WriteLine($"Usuário admin '{adminEmail}' adicionado à role '{adminRoleName}'.");
+                }
+            }
+        }
+
         app.Run();
     }
 }

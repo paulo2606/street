@@ -17,7 +17,6 @@
         });
     });
 
-    // Adiciona funcionalidade de seleção para cores e tamanhos (apenas classes CSS)
     const colorBoxes = document.querySelectorAll('.color-box');
     colorBoxes.forEach(box => {
         box.addEventListener('click', () => {
