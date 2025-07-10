@@ -1,13 +1,17 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity;
+@using street.Models;
+@inject SignInManager<ApplicationUser> SignInManager;
+
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - StreetStore</title> 
+    <title>@ViewData["Title"] - StreetStore</title>
     <link rel="stylesheet" href="~/css/index.css">
 
-    @await RenderSectionAsync("Styles", required: false) 
+    @await RenderSectionAsync("Styles", required: false)
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -19,16 +23,37 @@
     <header class="main-header" style="margin-top: 70px;">
         <nav class="navbar">
             <ul class="nav-links">
-                <li><a asp-controller="Produtos" asp-action="ListaProdutosCompleta" >Produtos</a></li> 
+                <li><a asp-controller="Produtos" asp-action="ListaProdutosCompleta">Produtos</a></li>
                 <li><a href="#">Acessórios</a></li>
                 <li><a href="#">Calçados</a></li>
             </ul>
             <div class="logo-container">
-                <img src="~/img/logo.png" alt="SS Logo" class="logo"> 
+                <img src="~/img/logo.png" alt="SS Logo" class="logo">
             </div>
             <div class="nav-icons">
                 <a asp-controller="CarrinhoDeCompras" asp-action="MeuCarrinho"><i class="fas fa-shopping-cart"></i></a>
-                <a href="#"><i class="fas fa-user-circle"></i></a>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a asp-controller="Conta" asp-action="Manage" title="Gerenciar sua conta">
+                        <i class="fas fa-user-circle"></i> Olá, @User.Identity?.Name!
+                    </a>
+                    <form asp-controller="Conta" asp-action="Logout" method="post" id="logoutForm" class="form-inline d-inline">
+                        <button type="submit" class="nav-link btn btn-link text-dark" style="padding:0; border:none; background:none; cursor:pointer;">
+                            <i class="fas fa-sign-out-alt"></i> Sair
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Conta" asp-action="Login" title="Entrar">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </a>
+                    <a asp-controller="Conta" asp-action="Cadastro" title="Cadastrar-se">
+                        <i class="fas fa-user-plus"></i> Cadastrar
+                    </a>
+                }
+
             </div>
         </nav>
     </header>

@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
 using street.Models;
+using System.Threading.Tasks;
 
 namespace street.Controllers
 {
     public class ContaController : Controller
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public ContaController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ContaController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -28,7 +28,12 @@ namespace street.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email ,
+                    Email = model.Email,
+                    Nome = model.Nome
+                };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
@@ -54,24 +59,27 @@ namespace street.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+            if (ModelState.IsValid)
+            {
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
 
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            if (result.IsLockedOut)
-            {
-                ModelState.AddModelError(string.Empty, "Conta bloqueada. Por favor, tente novamente mais tarde.");
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Login inválido. Verifique seu e-mail e senha.");
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError(string.Empty, "Conta bloqueada. Por favor, tente novamente mais tarde.");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Login inválido. Verifique seu e-mail e senha.");
+                }
             }
             return View(model);
         }
 
-        [HttpGet]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {

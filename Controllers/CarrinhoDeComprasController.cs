@@ -46,6 +46,7 @@ namespace street.Controllers
                 return NotFound("Produto não encontrado.");
             }
 
+
             var carrinho = await _carrinhoService.ObterOuCriarCarrinhoAsync(HttpContext);
 
             if (produto.Estoque < quantidade) 
