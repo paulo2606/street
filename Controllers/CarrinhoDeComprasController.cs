@@ -1,6 +1,8 @@
 ﻿// CarrinhoDeComprasController.cs
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson.Serialization.Conventions;
+using street.Controllers;
 using street.Models;
 using street.Services;
 using System.Globalization;
@@ -45,7 +47,6 @@ namespace street.Controllers
             {
                 return NotFound("Produto não encontrado.");
             }
-
 
             var carrinho = await _carrinhoService.ObterOuCriarCarrinhoAsync(HttpContext);
 

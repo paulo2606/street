@@ -1,7 +1,7 @@
 ﻿@model List<street.Models.Produto>
 
 @{
-   ViewData["Title"] = "Catalogo - SS Moda";
+    ViewData["Title"] = "Catalogo - SS Moda";
     ViewData["HideHeroSection"] = true;
 }
 
@@ -30,7 +30,7 @@
             <div class="size-options">
                 <label><input type="checkbox" name="size" value="PP"> PP</label>
                 <label><input type="checkbox" name="size" value="P"> P</label>
-                <label><input type="checkbox" name="size" value="M"> M</label>
+                <label><input type="checkbox" name="checkbox" value="M"> M</label>
                 <label><input type="checkbox" name="size" value="G"> G</label>
                 <label><input type="checkbox" name="size" value="GG"> GG</label>
             </div>
@@ -72,6 +72,11 @@
     </aside>
     <section class="products-section">
         <h1>Confira Nossos Produtos</h1>
+
+        <p>
+            <a asp-controller="Produtos" asp-action="CriarProduto" class="btn btn-primary">Adicionar Novo Produto</a>
+        </p>
+
         <div class="products-grid">
             @if (Model != null && Model.Any())
             {
@@ -83,6 +88,11 @@
                         </a>
                         <p class="product-name">@produto.Nome</p>
                         <p class="product-price">R$ @produto.Preco.ToString("N2")</p>
+
+                        <div class="product-actions">
+                            <a asp-controller="Produtos" asp-action="EditarProduto" asp-route-id="@produto.Id" class="btn btn-sm btn-info">Editar</a>
+                            <button type="button" class="btn btn-sm btn-danger delete-product-btn" data-id="@produto.Id" data-name="@produto.Nome">Deletar</button>
+                        </div>
                     </div>
                 }
             }
@@ -93,8 +103,42 @@
         </div>
     </section>
 
-    <script src="~/js/scriptListaProdutosCompleta">
-    </script>
-   </div>
+    @* Seu script original pode ir aqui, ou você pode ter um arquivo JS separado *@
+    <script src="~/js/scriptListaProdutosCompleta.js"></script>
 
+    @section Scripts {
+        <script>
+            // Novo script para a confirmação de exclusão
+            document.addEventListener('DOMContentLoaded', function () {
+                var deleteButtons = document.querySelectorAll('.delete-product-btn');
 
+                deleteButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var productId = this.getAttribute('data-id');
+                        var productName = this.getAttribute('data-name');
+
+                        // Usa o pop-up de confirmação nativo do navegador
+                        var confirmDelete = confirm(`Tem certeza que deseja excluir o produto "${productName}"?`);
+
+                        if (confirmDelete) {
+                            // Se o usuário confirmar, cria um formulário dinâmico e o envia
+                            var form = document.createElement('form');
+                            form.method = 'post';
+                            form.action = `/Produtos/DeletarProdutoConfirmado/${productId}`; // Aponta para a ação POST
+
+                            var antiForgeryInput = document.createElement('input');
+                            antiForgeryInput.type = 'hidden';
+                            antiForgeryInput.name = '__RequestVerificationToken';
+                            // Preenche o token anti-falsificação (necessário para [ValidateAntiForgeryToken])
+                            antiForgeryInput.value = '@Html.AntiForgeryToken()'.match(/value="([^"]*)"/)[1];
+
+                            form.appendChild(antiForgeryInput);
+                            document.body.appendChild(form);
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        </script>
+    }
+</div>
